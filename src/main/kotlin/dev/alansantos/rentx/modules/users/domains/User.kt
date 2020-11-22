@@ -1,6 +1,6 @@
 package dev.alansantos.rentx.modules.users.domains
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -8,27 +8,40 @@ import javax.persistence.*
 @Table(name = "users")
 data class User(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private val id: UUID? = null,
+        @Column(nullable = false, columnDefinition = "uuid")
+        var id: UUID? = null,
 
         @Column(nullable = false)
-        private val name: String,
+        var name: String,
+
+        @Column(nullable = true)
+        var image: String? = null,
 
         @Column(nullable = false)
-        private val image: String? = null,
+        var email: String,
 
         @Column(nullable = false)
-        private val email: String,
+        var password: String,
 
         @Column(nullable = false)
-        private val password: String,
-
-        @Column(nullable = false)
-        private val admin: Boolean,
+        var admin: Boolean,
 
         @Column(name = "created_at", nullable = false)
-        private val createdAt: LocalDate? = null,
+        var createdAt: LocalDateTime? = null,
 
         @Column(name = "updated_at", nullable = false)
-        private val updatedAt: LocalDate? = null
-) {}
+        var updatedAt: LocalDateTime? = null
+
+) {
+    @PrePersist
+    fun prePersist() {
+        this.id = UUID.randomUUID()
+        this.createdAt = LocalDateTime.now()
+        this.updatedAt = LocalDateTime.now()
+    }
+
+    @PreUpdate
+    fun preUpdate() {
+        this.updatedAt = LocalDateTime.now()
+    }
+}

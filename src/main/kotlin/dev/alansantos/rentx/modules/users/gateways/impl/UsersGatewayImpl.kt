@@ -3,8 +3,10 @@ package dev.alansantos.rentx.modules.users.gateways.impl
 import dev.alansantos.rentx.modules.users.domains.User
 import dev.alansantos.rentx.modules.users.gateways.UsersGateway
 import dev.alansantos.rentx.modules.users.repositories.UsersRepository
+import org.springframework.stereotype.Component
 import java.util.*
 
+@Component
 class UsersGatewayImpl(private val usersRepository: UsersRepository) : UsersGateway {
 
     override fun save(user: User): User {
