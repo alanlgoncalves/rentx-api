@@ -9,13 +9,13 @@ import javax.persistence.*
 data class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private val id: UUID,
+        private val id: UUID? = null,
 
         @Column(nullable = false)
         private val name: String,
 
         @Column(nullable = false)
-        private val image: String,
+        private val image: String? = null,
 
         @Column(nullable = false)
         private val email: String,
@@ -27,10 +27,8 @@ data class User(
         private val admin: Boolean,
 
         @Column(name = "created_at", nullable = false)
-        private val createdAt: LocalDate,
+        private val createdAt: LocalDate? = null,
 
         @Column(name = "updated_at", nullable = false)
-        private val updatedAt: LocalDate
-) {
-    constructor() {}
-}
+        private val updatedAt: LocalDate? = null
+) {}
