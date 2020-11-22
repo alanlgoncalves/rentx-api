@@ -3,11 +3,11 @@ package dev.alansantos.rentx.modules.users.services
 import dev.alansantos.rentx.modules.users.domains.User
 import dev.alansantos.rentx.modules.users.exceptions.UserAlreadyExistsException
 import dev.alansantos.rentx.modules.users.gateways.UsersGateway
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class CreateUsersService(private val usersGateway: UsersGateway) {
+class CreateUsersService(private val usersGateway: UsersGateway, private val passwordEncoder: PasswordEncoder) {
 
     fun execute(name: String, email: String, password: String, admin: Boolean = false): User {
 
@@ -21,8 +21,7 @@ class CreateUsersService(private val usersGateway: UsersGateway) {
     }
 
     private fun encryptPassword(password: String): String {
-        //return BCryptPasswordEncoder().encode(password)
-        return password
+        return passwordEncoder.encode(password)
     }
 
     private fun validateEmail(email: String) {

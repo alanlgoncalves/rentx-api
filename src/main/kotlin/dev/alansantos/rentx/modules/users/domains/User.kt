@@ -33,6 +33,7 @@ data class User(
         var updatedAt: LocalDateTime? = null
 
 ) {
+
     @PrePersist
     fun prePersist() {
         this.id = UUID.randomUUID()
