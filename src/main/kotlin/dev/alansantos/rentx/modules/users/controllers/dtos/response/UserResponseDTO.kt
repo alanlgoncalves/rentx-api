@@ -4,13 +4,13 @@ import dev.alansantos.rentx.modules.users.domains.User
 import java.time.LocalDateTime
 import java.util.*
 
-class CreateUserResponseDTO {
+class UserResponseDTO {
 
     val id: UUID
     val name: String
     val image: String?
     val email: String
-    val admin: Boolean
+    val roles: Set<String>
     val createdAt: LocalDateTime
     val updatedAt: LocalDateTime
 
@@ -19,7 +19,7 @@ class CreateUserResponseDTO {
         this.name = user.name
         this.image = user.image
         this.email = user.email
-        this.admin = user.admin
+        this.roles = user.roles.map { it.name }.toSet()
         this.createdAt = user.createdAt!!
         this.updatedAt = user.updatedAt!!
     }

@@ -5,8 +5,8 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
-data class User(
+@Table(name = "roles")
+data class Role(
         @Id
         @Column(nullable = false, columnDefinition = "uuid")
         var id: UUID? = null,
@@ -14,27 +14,14 @@ data class User(
         @Column(nullable = false)
         var name: String,
 
-        @Column(nullable = true)
-        var image: String? = null,
-
         @Column(nullable = false)
-        var email: String,
-
-        @Column(nullable = false)
-        var password: String,
-
-        @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-        @JoinTable(name = "users_roles",
-                joinColumns = [JoinColumn(name = "user_id")],
-                inverseJoinColumns = [JoinColumn(name = "role_id")])
-        var roles: Set<Role>,
+        var description: String,
 
         @Column(name = "created_at", nullable = false)
         var createdAt: LocalDateTime? = null,
 
         @Column(name = "updated_at", nullable = false)
         var updatedAt: LocalDateTime? = null
-
 ) {
 
     @PrePersist
@@ -48,5 +35,4 @@ data class User(
     fun preUpdate() {
         this.updatedAt = LocalDateTime.now()
     }
-
 }

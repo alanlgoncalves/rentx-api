@@ -2,12 +2,15 @@ package dev.alansantos.rentx.modules.users.services
 
 import dev.alansantos.rentx.modules.users.domains.User
 import dev.alansantos.rentx.modules.users.exceptions.UserAlreadyExistsException
+import dev.alansantos.rentx.modules.users.gateways.RolesGateway
 import dev.alansantos.rentx.modules.users.gateways.UsersGateway
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class CreateUsersService(private val usersGateway: UsersGateway, private val passwordEncoder: PasswordEncoder) {
+class CreateUsersService(private val usersGateway: UsersGateway,
+                         private val rolesGateway: RolesGateway,
+                         private val passwordEncoder: PasswordEncoder) {
 
     fun execute(name: String, email: String, password: String, admin: Boolean = false): User {
 
@@ -15,7 +18,9 @@ class CreateUsersService(private val usersGateway: UsersGateway, private val pas
 
         val encryptPassword = encryptPassword(password)
 
-        val user = User(name = name, email = email, password = encryptPassword, admin = admin)
+        val role = rolesGateway.findByName("USER").get()
+
+        val user = User(name = name, email = email, password = encryptPassword, roles = setOf(role))
 
         return usersGateway.save(user)
     }

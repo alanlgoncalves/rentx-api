@@ -3,6 +3,7 @@ package dev.alansantos.rentx.modules.users.services
 import dev.alansantos.rentx.modules.users.domains.Session
 import dev.alansantos.rentx.modules.users.domains.User
 import dev.alansantos.rentx.modules.users.exceptions.AuthenticationException
+import dev.alansantos.rentx.modules.users.gateways.RolesGateway
 import dev.alansantos.rentx.modules.users.gateways.UsersGateway
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -37,9 +38,12 @@ class AuthenticateUserService(
     }
 
     private fun generateToken(user: User): String {
+        val authorities = user.roles.map { "ROLE_${it.name}" }.toSet()
+
         return Jwts.builder()
                 .setSubject(user.email)
-                .setExpiration(Date(System.currentTimeMillis() + expirationTime))
+                .claim("authorities", authorities)
+                .setExpiration(Date(System.currentTimeMillis() + expirationTime * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact()
     }

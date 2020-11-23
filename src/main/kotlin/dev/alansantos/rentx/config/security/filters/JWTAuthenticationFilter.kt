@@ -9,7 +9,6 @@ import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 
-
 @Component
 class JWTAuthenticationFilter(val tokenAuthenticationUtils: TokenAuthenticationUtils) : GenericFilterBean() {
 

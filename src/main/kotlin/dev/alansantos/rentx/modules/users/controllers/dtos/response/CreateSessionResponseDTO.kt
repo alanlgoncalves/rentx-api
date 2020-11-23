@@ -29,7 +29,7 @@ class CreateSessionResponseDTO {
             this.name = user.name
             this.image = user.image
             this.email = user.email
-            this.admin = user.admin
+            this.admin = false
             this.createdAt = user.createdAt!!
             this.updatedAt = user.updatedAt!!
         }
