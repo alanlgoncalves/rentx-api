@@ -21,15 +21,19 @@ class AuthenticateUserService(
 
     fun execute(email: String, password: String): Session {
 
+        val user = getUser(email, password)
+
+        return Session(user, generateToken(user))
+    }
+
+    private fun getUser(email: String, password: String): User {
         val userOptional = usersGateway.findUserByEmail(email)
 
         if (!userOptional.isPresent || !passwordEncode.matches(password, userOptional.get().password)) {
             throw AuthenticationException("Incorrect user email/password combination")
         }
 
-        val user = userOptional.get()
-
-        return Session(user, generateToken(user))
+        return userOptional.get()
     }
 
     private fun generateToken(user: User): String {
