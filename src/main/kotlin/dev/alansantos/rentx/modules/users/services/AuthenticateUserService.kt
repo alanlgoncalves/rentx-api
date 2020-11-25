@@ -3,7 +3,6 @@ package dev.alansantos.rentx.modules.users.services
 import dev.alansantos.rentx.modules.users.domains.Session
 import dev.alansantos.rentx.modules.users.domains.User
 import dev.alansantos.rentx.modules.users.exceptions.AuthenticationException
-import dev.alansantos.rentx.modules.users.gateways.RolesGateway
 import dev.alansantos.rentx.modules.users.gateways.UsersGateway
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
