@@ -26,7 +26,7 @@ import java.util.*
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class EntranceServiceWithAutowireTest : FreeSpec({
+class SessionsControllerTest : FreeSpec({
 
 }) {
     override fun listeners() = listOf(SpringListener)
@@ -36,8 +36,6 @@ class EntranceServiceWithAutowireTest : FreeSpec({
 
     @Autowired
     private lateinit var mockMvc: MockMvc
-
-    private val objectMapper = ObjectMapper()
 
     init {
         "Feature: Session API" - {
@@ -173,7 +171,7 @@ class EntranceServiceWithAutowireTest : FreeSpec({
     private fun callSessionApi(createSessionRequestDTO: CreateSessionRequestDTO): MvcResult {
         return mockMvc.perform(post("/api/v1/sessions")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createSessionRequestDTO))
+                .content(ObjectMapper().writeValueAsString(createSessionRequestDTO))
         ).andReturn()
     }
 }

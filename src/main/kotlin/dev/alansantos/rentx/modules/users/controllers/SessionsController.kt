@@ -17,7 +17,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping(path = ["/api/v1/sessions"])
 @Api(value = "Session endpoints", tags = ["Session REST operations"])
-class SessionController(val authenticateUserService: AuthenticateUserService) {
+class SessionsController(val authenticateUserService: AuthenticateUserService) {
 
     @ApiOperation(value = "Create session token")
     @ApiResponses(value = [
