@@ -9,18 +9,18 @@ import javax.validation.constraints.Size
 @ApiModel(value = "CreateUserRequestDTO", description = "Create user data")
 data class CreateUserRequestDTO(
 
-        @NotBlank
-        @Size(min = 4)
+        @field:NotBlank
+        @field:Size(min = 4)
         @ApiModelProperty(value = "Users name", dataType = "String")
         val name: String,
 
-        @Email
-        @NotBlank
+        @field:Email
+        @field:NotBlank
         @ApiModelProperty(value = "Users email", dataType = "String")
         val email: String,
 
-        @NotBlank
-        @Size(min = 6)
+        @field:NotBlank
+        @field:Size(min = 6)
         @ApiModelProperty(value = "Users password", dataType = "String")
         val password: String
 )
