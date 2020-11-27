@@ -16,7 +16,7 @@ class UserResponseDTO {
     val name: String
 
     @ApiModelProperty(value = "User avatar", dataType = "String")
-    val image: String?
+    val avatar: String?
 
     @ApiModelProperty(value = "User email", dataType = "String")
     val email: String
@@ -33,7 +33,7 @@ class UserResponseDTO {
     constructor(user: User) {
         this.id = user.id!!
         this.name = user.name
-        this.image = user.image
+        this.avatar = user.avatar
         this.email = user.email
         this.roles = user.roles.map { it.name }.toSet()
         this.createdAt = user.createdAt!!

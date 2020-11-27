@@ -15,7 +15,7 @@ data class User(
         var name: String,
 
         @Column(nullable = true)
-        var image: String? = null,
+        var avatar: String? = null,
 
         @Column(nullable = false)
         var email: String,
@@ -34,7 +34,6 @@ data class User(
 
         @Column(name = "updated_at", nullable = false)
         var updatedAt: LocalDateTime? = null
-
 ) {
 
     @PrePersist

@@ -8,13 +8,13 @@ import io.swagger.annotations.ApiModelProperty
 class CreateSessionResponseDTO {
 
     @ApiModelProperty(value = "Users information", dataType = "User")
-    val userDTO: UserResponseDTO
+    val user: UserResponseDTO
 
     @ApiModelProperty(value = "Users token", dataType = "String")
     val token: String
 
     constructor(session: Session) {
-        this.userDTO = UserResponseDTO(session.user)
+        this.user = UserResponseDTO(session.user)
         this.token = session.token
     }
 
