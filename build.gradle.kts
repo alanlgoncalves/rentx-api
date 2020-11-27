@@ -32,10 +32,6 @@ dependencies {
     // Srping Data
     implementation("org.springframework.data:spring-data-jpa")
 
-    // Spring Boot Test/Dev
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-
     // JWT
     implementation("io.jsonwebtoken:jjwt:0.9.1")
 
@@ -49,13 +45,27 @@ dependencies {
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // Spek
+    // Spring Boot Test/Dev
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "junit")
+        exclude(module = "mockito-core")
+    }
+
+    // Kotest
     testImplementation("io.kotest:kotest-runner-junit5:4.3.1")
     testImplementation("io.kotest:kotest-assertions-core:4.3.1")
+    testImplementation("io.kotest:kotest-assertions-json-jvm:4.3.1")
     testImplementation("io.kotest:kotest-property:4.3.1")
+    testImplementation("io.kotest:kotest-extensions-spring:4.3.1")
 
+    // Mockk
     testImplementation("com.ninja-squad:springmockk:3.0.0")
-    testImplementation("io.kotest:kotest-property:4.3.1")
+
+    // H2
+    testImplementation("com.h2database:h2")
+
+
 }
 
 tasks.withType<Test> {
