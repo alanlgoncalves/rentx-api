@@ -10,9 +10,11 @@ import dev.alansantos.rentx.modules.users.exceptions.AuthenticationException
 import dev.alansantos.rentx.modules.users.services.AuthenticateUserService
 import io.kotest.assertions.json.shouldContainJsonKey
 import io.kotest.assertions.json.shouldContainJsonKeyValue
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.spring.SpringListener
+import io.mockk.clearAllMocks
 import io.mockk.every
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -29,7 +31,6 @@ import java.util.*
 class SessionsControllerTest : FreeSpec({
 
 }) {
-    override fun listeners() = listOf(SpringListener)
 
     @MockkBean
     private lateinit var authenticateUserService: AuthenticateUserService
@@ -37,13 +38,23 @@ class SessionsControllerTest : FreeSpec({
     @Autowired
     private lateinit var mockMvc: MockMvc
 
+    override fun listeners() = listOf(SpringListener)
+
+    override fun afterSpec(spec: Spec) {
+        super.afterSpec(spec)
+
+        clearAllMocks()
+    }
+
     init {
         "Feature: Session API" - {
 
             val name = "John Doe"
             val email = "john.doe@teste.com"
             val password = "123456"
-            val token = "asdfasdfsadfasdf"
+            val token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huLmRvZUB0ZXN0LmNvbSIsImF1dGhvcml0a" +
+                    "WVzIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE2MDY1MjI2MjJ9.RM8h6HtZGR0BCxyNhlUbLQtkaph2bDSe_" +
+                    "5w0Tdol__DNKBpEDNIwCqk3NnLZhPAC-wfevxV1kmngQqhy5mnTlg"
             val avatar = "https://alansantos.dev/avatar.png"
             val role = Role(name = "USER", description = "User Role")
             val createdAt = LocalDateTime.now()

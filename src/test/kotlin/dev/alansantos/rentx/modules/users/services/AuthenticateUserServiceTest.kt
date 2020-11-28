@@ -5,79 +5,89 @@ import dev.alansantos.rentx.modules.users.domains.User
 import dev.alansantos.rentx.modules.users.exceptions.AuthenticationException
 import dev.alansantos.rentx.modules.users.gateways.UsersGateway
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.shouldBe
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 
-class AuthenticateUserServiceTest : StringSpec({
+class AuthenticateUserServiceTest : StringSpec() {
 
-    val usersGateway: UsersGateway = mockk()
+    private val usersGateway: UsersGateway = mockk()
 
-    val passwordEncode: PasswordEncoder = mockk()
+    private val passwordEncode: PasswordEncoder = mockk()
 
-    val authenticateUserService = AuthenticateUserService(
+    private val authenticateUserService = AuthenticateUserService(
             usersGateway, passwordEncode, "rentx", 1800)
 
-    "should authenticate user with success" {
-        // GIVEN
-        val email = "john.doe@test.com"
-        val password = "123456"
-        val userRole = Role(name = "USER", description = "User role")
-        val user = User(name = "John Doe", email = email, password = password, roles = setOf(userRole))
+    override fun afterSpec(spec: Spec) {
+        super.afterSpec(spec)
 
-        every { usersGateway.findUserByEmail(email) } returns Optional.of(user)
-        every { passwordEncode.matches(password, password) } returns true
-
-        //WHEN
-        val session = authenticateUserService.execute(email, password)
-
-        // THEN
-        verify { usersGateway.findUserByEmail(email) }
-        verify { passwordEncode.matches(password, password) }
-
-        user.name shouldBeEqualComparingTo session.user.name
-        user.email shouldBeEqualComparingTo session.user.email
-        user.password shouldBeEqualComparingTo session.user.password
-        setOf("USER") shouldBe session.user.roles.map { it.name }.toSet()
+        clearAllMocks()
     }
 
-    "should not authenticate not found user" {
-        // GIVEN
-        val email = "john.doe@test.com"
-        val password = "123456"
+    init {
+        "should authenticate user with success" {
+            // GIVEN
+            val email = "john.doe@test.com"
+            val password = "123456"
+            val userRole = Role(name = "USER", description = "User role")
+            val user = User(name = "John Doe", email = email, password = password, roles = setOf(userRole))
 
-        every { usersGateway.findUserByEmail(email) } returns Optional.empty()
+            every { usersGateway.findUserByEmail(email) } returns Optional.of(user)
+            every { passwordEncode.matches(password, password) } returns true
 
-        // WHEN / THEN
-        shouldThrow<AuthenticationException> {
-            authenticateUserService.execute(email, password)
+            //WHEN
+            val session = authenticateUserService.execute(email, password)
+
+            // THEN
+            verify { usersGateway.findUserByEmail(email) }
+            verify { passwordEncode.matches(password, password) }
+
+            user.name shouldBeEqualComparingTo session.user.name
+            user.email shouldBeEqualComparingTo session.user.email
+            user.password shouldBeEqualComparingTo session.user.password
+            setOf("USER") shouldBe session.user.roles.map { it.name }.toSet()
         }
 
-        verify { usersGateway.findUserByEmail(email) }
-    }
+        "should not authenticate not found user" {
+            // GIVEN
+            val email = "john.doe@test.com"
+            val password = "123456"
 
-    "should not authenticate user with invalid password" {
-        // GIVEN
-        val email = "john.doe@test.com"
-        val password = "123456"
-        val userRole = Role(name = "USER", description = "User role")
-        val user = User(name = "John Doe", email = email, password = "12345678", roles = setOf(userRole))
+            every { usersGateway.findUserByEmail(email) } returns Optional.empty()
 
-        every { usersGateway.findUserByEmail(email) } returns Optional.of(user)
-        every { passwordEncode.matches(password, user.password) } returns false
+            // WHEN / THEN
+            shouldThrow<AuthenticationException> {
+                authenticateUserService.execute(email, password)
+            }
 
-        // WHEN / THEN
-        shouldThrow<AuthenticationException> {
-            authenticateUserService.execute(email, password)
+            verify { usersGateway.findUserByEmail(email) }
         }
 
-        verify { usersGateway.findUserByEmail(email) }
-        verify { passwordEncode.matches(password, password) }
+        "should not authenticate user with invalid password" {
+            // GIVEN
+            val email = "john.doe@test.com"
+            val password = "123456"
+            val userRole = Role(name = "USER", description = "User role")
+            val user = User(name = "John Doe", email = email, password = "12345678", roles = setOf(userRole))
+
+            every { usersGateway.findUserByEmail(email) } returns Optional.of(user)
+            every { passwordEncode.matches(password, user.password) } returns false
+
+            // WHEN / THEN
+            shouldThrow<AuthenticationException> {
+                authenticateUserService.execute(email, password)
+            }
+
+            verify { usersGateway.findUserByEmail(email) }
+            verify { passwordEncode.matches(password, password) }
+        }
     }
 
-})
+}
